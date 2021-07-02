@@ -1,5 +1,14 @@
-import { Controller, Get, Post, Body, Delete, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Delete,
+  Put,
+  Param,
+} from '@nestjs/common';
 import { PersonService } from './person.service';
+import { PersonDto } from './person.dto';
 
 @Controller('people')
 export class PersonController {
@@ -11,20 +20,18 @@ export class PersonController {
   }
 
   @Post()
-  async postPeople(@Body car:){
-
+  async postPeople(@Body() person: PersonDto) {
+    return this.personService.postPerson(person);
   }
 
   @Get()
-  async getPersonById(){
-
+  async getPersonById(@Param('id') id: number) {
+    return this.personService.getPersonById(id);
   }
 
   @Delete()
-  async deletePersonById(){
+  async deletePersonById() {}
 
-  }
-
-  @Put
-  async putPersonById(){}
+  @Put()
+  async putPersonById() {}
 }
