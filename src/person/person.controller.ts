@@ -6,6 +6,7 @@ import {
   Delete,
   Put,
   Param,
+  Query,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { PersonDto } from './person.dto';
@@ -24,14 +25,20 @@ export class PersonController {
     return this.personService.postPerson(person);
   }
 
-  @Get()
+  @Get(':id')
   async getPersonById(@Param('id') id: number) {
     return this.personService.getPersonById(id);
   }
 
-  @Delete()
-  async deletePersonById() {}
+  @Delete(':id')
+  async deletePersonById(@Param(':id') id: number) {
+    this.personService.deletePersonById(id);
+  }
 
-  @Put()
-  async putPersonById() {}
+  @Put(':id')
+  async putPersonById(@Param('id') id: number, @Query() query) {
+    const propertyName = query.property_name;
+    const propertyValue = query.property_value;
+    return this.personService.putPersonByID(id, propertyName, propertyValue);
+  }
 }

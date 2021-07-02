@@ -14,12 +14,15 @@ export class PersonService {
     return this.people.push(person);
   }
 
-  public async getPersonById(id: number) {
-    const person = this.people.find((person) => person.id === id);
-    if (person) {
-      throw new HttpException('Not Found', 404);
-    }
-    return person;
+  public async getPersonById(id: number): Promise<any> {
+    const personId = Number[id];
+    return new Promise((resolve) => {
+      const person = this.people.find((person) => person.id === id);
+      if (person) {
+        throw new HttpException('Not Found', 404);
+      }
+      return resolve(person);
+    });
   }
 
   public async deletePersonById(id: number) {
