@@ -41,13 +41,16 @@ export class PersonService {
     id: number,
     propertyName: string,
     propertValue: string,
-  ) {
-    const i = this.people.findIndex((person) => person.id === id);
-    if (i === -1) {
-      throw new HttpException('Not Found', 404);
-    }
-    this.people[i][propertyName] = propertValue;
+  ): Promise<any> {
+    const personId = Number(id);
+    return new Promise((resolve) => {
+      const i = this.people.findIndex((person) => person.id === personId);
+      if (i === -1) {
+        throw new HttpException('Not Found', 404);
+      }
+      this.people[i][propertyName] = propertValue;
 
-    return this.people;
+      return resolve(this.people[i]);
+    });
   }
 }
