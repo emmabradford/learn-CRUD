@@ -11,7 +11,13 @@ export class PersonService {
     @InjectModel('Person') private readonly personModel: Model<IPerson>,
   ) {}
 
-  public async getPeople() {}
+  public async getPeople() {
+    const people = this.personModel.find().exec();
+    if (!people || !people[0]) {
+      throw new HttpException('not found', 404);
+    }
+    return cars;
+  }
 
   public async postPerson(person) {}
 
