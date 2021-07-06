@@ -11,7 +11,7 @@ export class PersonService {
     @InjectModel('Person') private readonly personModel: Model<IPerson>,
   ) {}
 
-  public async getPeople() {
+  public async getPeople(): Promise<PersonDto[]> {
     const people = await this.personModel.find().exec();
     if (!people || !people[0]) {
       throw new HttpException('not found', 404);
@@ -19,12 +19,12 @@ export class PersonService {
     return people;
   }
 
-  public async postPerson(newPerson) {
+  public async postPerson(newPerson: PersonDto) {
     const person = await this.personModel(newPerson);
     return person.save();
   }
 
-  public async getPersonById(id: number): Promise<any> {
+  public async getPersonById(id: number): Promise<PersonDto> {
     const people = await this.personModel.findOne({ id }).exec();
     if (!people) {
       throw new HttpException('not found', 404);
@@ -32,7 +32,7 @@ export class PersonService {
     return people;
   }
 
-  public async deletePersonById(id: number): Promise<any> {
+  public async deletePersonById(id: number): Promise<PersonDto> {
     const person = await this.personModel.deleteOne({ id }).exec();
     if (person.deletedCount === 0) {
       throw new HttpException('Not found', 404);
@@ -44,8 +44,10 @@ export class PersonService {
     id: number,
     propertyName: string,
     propertValue: string,
-  ): Promise<any> {
-    const person = await this.personModel.findOne({ id }).exec();
+  ): Promise<PersonDto> {
+    const person = await this.personModel
+      .findOneAndUpdate({ id }, { [propertyName]: propertValue })
+      .exec();
     if (!person) {
       throw new HttpException('Not Found', 404);
     }
