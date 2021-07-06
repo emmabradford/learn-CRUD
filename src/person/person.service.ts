@@ -25,13 +25,16 @@ export class PersonService {
     });
   }
 
-  public async deletePersonById(id: number) {
-    const i = this.people.findIndex((person) => person.id === id);
-    if (i === -1) {
-      throw new HttpException('Not Found', 404);
-    }
-    this.people.splice(i, 1);
-    return this.people;
+  public async deletePersonById(id: number): Promise<any> {
+    const personId = Number(id);
+    return new Promise((resolve) => {
+      const i = this.people.findIndex((person) => person.id === personId);
+      if (i === -1) {
+        throw new HttpException('Not Found', 404);
+      }
+      this.people.splice(i, 1);
+      return resolve(this.people);
+    });
   }
 
   public async putPersonByID(
