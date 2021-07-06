@@ -1,56 +1,27 @@
 import { throwStatement } from '@babel/types';
 import { HttpException, Injectable } from '@nestjs/common';
-import { PEOPLE } from './person.mok';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { IPerson } from './interfaces/person.interface';
+import { PersonDto } from './person.dto';
 
 @Injectable()
 export class PersonService {
-  private people = PEOPLE;
+  constructor(
+    @InjectModel('Person') private readonly personModel: Model<IPerson>,
+  ) {}
 
-  public async getPeople() {
-    return this.people;
-  }
+  public async getPeople() {}
 
-  public async postPerson(person) {
-    return this.people.push(person);
-  }
+  public async postPerson(person) {}
 
-  public async getPersonById(id: number): Promise<any> {
-    const personId = Number[id];
-    return new Promise((resolve) => {
-      const person = this.people.find((person) => person.id === id);
-      if (person) {
-        throw new HttpException('Not Found', 404);
-      }
-      return resolve(person);
-    });
-  }
+  public async getPersonById(id: number): Promise<any> {}
 
-  public async deletePersonById(id: number): Promise<any> {
-    const personId = Number(id);
-    return new Promise((resolve) => {
-      const i = this.people.findIndex((person) => person.id === personId);
-      if (i === -1) {
-        throw new HttpException('Not Found', 404);
-      }
-      this.people.splice(i, 1);
-      return resolve(this.people);
-    });
-  }
+  public async deletePersonById(id: number): Promise<any> {}
 
   public async putPersonByID(
     id: number,
     propertyName: string,
     propertValue: string,
-  ): Promise<any> {
-    const personId = Number(id);
-    return new Promise((resolve) => {
-      const i = this.people.findIndex((person) => person.id === personId);
-      if (i === -1) {
-        throw new HttpException('Not Found', 404);
-      }
-      this.people[i][propertyName] = propertValue;
-
-      return resolve(this.people[i]);
-    });
-  }
+  ): Promise<any> {}
 }
