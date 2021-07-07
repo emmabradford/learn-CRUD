@@ -5,6 +5,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { IPerson } from './interfaces/person.interface';
 import { PersonDto } from './person.dto';
 
+const personProjection = {
+  __v: false,
+  _id: false,
+};
+
 @Injectable()
 export class PersonService {
   constructor(
@@ -12,7 +17,7 @@ export class PersonService {
   ) {}
 
   public async getPeople(): Promise<PersonDto[]> {
-    const people = await this.personModel.find().exec();
+    const people = await this.personModel.find({}, personProjection).exec();
     console.log(people);
     if (!people || !people[0]) {
       throw new HttpException('not found', 404);
@@ -26,7 +31,9 @@ export class PersonService {
   }
 
   public async getPersonById(id: number): Promise<PersonDto> {
-    const people = await this.personModel.findOne({ id }).exec();
+    const people = await this.personModel
+      .findOne({ id }, personProjection)
+      .exec();
     if (!people) {
       throw new HttpException('not found', 404);
     }
