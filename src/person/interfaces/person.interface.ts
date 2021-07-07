@@ -6,5 +6,5 @@ export interface IPerson extends Document {
   readonly title: string;
   readonly partner: string;
   readonly home: string;
-  readonly weapon: string;
+  readonly weapon: Array<string>;
 }

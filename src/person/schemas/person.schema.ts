@@ -6,5 +6,5 @@ export const PersonSchema = new mongoose.Schema({
   title: String,
   partner: String,
   home: String,
-  weapon: String,
+  weapon: Array,
 });

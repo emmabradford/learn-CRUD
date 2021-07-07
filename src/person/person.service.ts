@@ -8,19 +8,20 @@ import { PersonDto } from './person.dto';
 @Injectable()
 export class PersonService {
   constructor(
-    @InjectModel('Person') private readonly personModel: Model<IPerson>,
+    @InjectModel('people') private readonly personModel: Model<IPerson>,
   ) {}
 
   public async getPeople(): Promise<PersonDto[]> {
     const people = await this.personModel.find().exec();
+    console.log(people);
     if (!people || !people[0]) {
       throw new HttpException('not found', 404);
     }
     return people;
   }
 
-  public async postPerson(newPerson: PersonDto) {
-    const person = await this.personModel(newPerson);
+  public async postPerson(personn: PersonDto) {
+    const person = await new this.personModel(personn);
     return person.save();
   }
 
@@ -32,8 +33,9 @@ export class PersonService {
     return people;
   }
 
-  public async deletePersonById(id: number): Promise<PersonDto> {
+  public async deletePersonById(id: number): Promise<any> {
     const person = await this.personModel.deleteOne({ id }).exec();
+    console.log('person deleted', person);
     if (person.deletedCount === 0) {
       throw new HttpException('Not found', 404);
     }
